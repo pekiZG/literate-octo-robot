@@ -2,11 +2,11 @@ package hr.java.vjezbe.entitet;
 
 public class SenzorTemperature extends Senzor {
 
-	String naziv;
+	String nazivKomponente;
 
-	public SenzorTemperature(String naziv) {
+	public SenzorTemperature(String nazivKonponente) {
 		super(new String("C"), (byte) Integer.parseInt("2"));
-		this.naziv = naziv;
+		this.nazivKomponente = nazivKonponente;
 	}
 
 	@Override
