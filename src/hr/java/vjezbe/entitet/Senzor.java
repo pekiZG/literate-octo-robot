@@ -3,11 +3,11 @@ package hr.java.vjezbe.entitet;
 import java.math.BigDecimal;
 
 public abstract class Senzor {
-	
+
 	String mjernaJedinica;
 	Byte preciznost;
 	BigDecimal vrijednost;
-	
+
 	public Senzor(String mjernaJedinica, Byte preciznost) {
 		super();
 		this.mjernaJedinica = mjernaJedinica;
@@ -37,7 +37,7 @@ public abstract class Senzor {
 	public void setVrijednost(BigDecimal vrijednost) {
 		this.vrijednost = vrijednost;
 	}
-	
+
 	public abstract String dohvatiPodatkeSenzora();
-	
+
 }

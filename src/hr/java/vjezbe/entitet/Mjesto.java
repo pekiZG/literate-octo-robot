@@ -3,7 +3,7 @@ package hr.java.vjezbe.entitet;
 public class Mjesto {
 	String naziv;
 	Zupanija zupanija;
-	
+
 	public Mjesto(String naziv, Zupanija zupanija) {
 		super();
 		this.naziv = naziv;

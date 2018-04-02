@@ -26,5 +26,5 @@ public class GeografskaTocka {
 	public void setY(BigDecimal y) {
 		this.y = y;
 	}
-	
+
 }

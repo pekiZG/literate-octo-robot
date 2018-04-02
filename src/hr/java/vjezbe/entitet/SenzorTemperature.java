@@ -1,8 +1,20 @@
 package hr.java.vjezbe.entitet;
 
+import java.math.BigDecimal;
+import java.util.Random;
+
+import hr.java.vjezbe.glavna.Glavna;
+import hr.java.vjezbe.iznimke.NiskaTemperaturaException;
+import hr.java.vjezbe.iznimke.VisokaTemperaturaException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SenzorTemperature extends Senzor {
 
 	String nazivKomponente;
+
+	private static final Logger logger = LoggerFactory.getLogger(SenzorTemperature.class);
 
 	public SenzorTemperature(String nazivKonponente) {
 		super(new String("°C"), (byte) Integer.parseInt("2"));
@@ -15,6 +27,22 @@ public class SenzorTemperature extends Senzor {
 		return "Komponenta: " + this.nazivKomponente + ", vrijednost: " + super.getVrijednost().toString() + " "
 				+ super.getMjernaJedinica().toString();
 
+	}
+
+	public void generirajVrijednost() throws VisokaTemperaturaException {
+
+		int nasumicmaVrijednost = (new Random().nextInt(100)) - 50 + 1;
+		BigDecimal vrijednost = new BigDecimal(nasumicmaVrijednost);
+
+		super.setVrijednost(vrijednost);
+
+		if (nasumicmaVrijednost > 40) {
+			throw new VisokaTemperaturaException();
+		}
+
+		if (nasumicmaVrijednost < -10) {
+			throw new NiskaTemperaturaException();
+		}
 	}
 
 }

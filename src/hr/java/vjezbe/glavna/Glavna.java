@@ -12,11 +12,18 @@ import hr.java.vjezbe.entitet.SenzorTemperature;
 import hr.java.vjezbe.entitet.SenzorVjetra;
 import hr.java.vjezbe.entitet.SenzorVlage;
 import hr.java.vjezbe.entitet.Zupanija;
+import hr.java.vjezbe.iznimke.NiskaTemperaturaException;
+import hr.java.vjezbe.iznimke.VisokaTemperaturaException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Glavna {
 
 	private static final int BROJ_KLASICNIH_MJERNIH_POSTAJA = 2;
 	private static final int BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA = 1;
+
+	private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
 	public static void main(String[] args) {
 
@@ -28,10 +35,10 @@ public class Glavna {
 		// Create
 		for (int i = 0; i < brojMjernihPostaja; i++) {
 			System.out.println("Unesite " + (i + 1) + ". mjernu postaju:");
-			
+
 			if (i < BROJ_KLASICNIH_MJERNIH_POSTAJA) {
-				mjernePostaje[i] = kreirajKlasicnuMjernuPostaju(scanner);	
-			}else {
+				mjernePostaje[i] = kreirajKlasicnuMjernuPostaju(scanner);
+			} else {
 				mjernePostaje[i] = kreirajRadioSondaznuMjernuPostaju(scanner);
 			}
 		}
@@ -55,7 +62,34 @@ public class Glavna {
 
 		}
 
-		scanner.close();
+		while (true) {
+			System.out.println("Generiram nasumične vrijednost senzora temperature");
+			for (int i = 0; i < mjernePostaje.length; i++) {
+				Senzor[] senzori = mjernePostaje[i].dohvatiSenzore();
+				for (int j = 0; j < senzori.length; j++) {
+					if (senzori[j] instanceof SenzorTemperature) {
+						SenzorTemperature senzorTemperature = (SenzorTemperature) senzori[j];
+						try {
+							senzorTemperature.generirajVrijednost();
+						} catch (VisokaTemperaturaException e) {
+							System.out.println("Dogodila se greška: " + e.getMessage());
+							System.out.println("Na mjernoj postaji: " + mjernePostaje[i].getNaziv());
+						} catch (NiskaTemperaturaException e) {
+							System.out.println("Dogodila se greška: " + e.getMessage());
+							System.out.println("Na mjernoj postaji: " + mjernePostaje[i].getNaziv());
+						}
+					}
+				}
+			}
+
+			try {
+				Thread.sleep(1 * 1000);
+			} catch (InterruptedException e) {
+				logger.error(e.getMessage());
+			}
+		}
+
+		// scanner.close();
 
 	}
 
@@ -65,8 +99,7 @@ public class Glavna {
 		String nazivDrzave = scanner.nextLine();
 
 		System.out.println("Unesite površinu države:");
-		BigDecimal povrsinaDrzave = scanner.nextBigDecimal();
-		scanner.nextLine();
+		BigDecimal povrsinaDrzave = Validator.unesiBigDecimal(scanner);
 
 		return new Drzava(nazivDrzave, povrsinaDrzave);
 	}
@@ -94,12 +127,10 @@ public class Glavna {
 	public static GeografskaTocka kreirajGeografskuTocku(Scanner scanner) {
 
 		System.out.println("Unesite Geo koordinatu X:");
-		BigDecimal x = scanner.nextBigDecimal();
-		scanner.nextLine();
+		BigDecimal x = Validator.unesiBigDecimal(scanner);
 
 		System.out.println("Unesite Geo koordinatu Y:");
-		BigDecimal y = scanner.nextBigDecimal();
-		scanner.nextLine();
+		BigDecimal y = Validator.unesiBigDecimal(scanner);
 
 		return new GeografskaTocka(x, y);
 	}
@@ -121,8 +152,7 @@ public class Glavna {
 		String velicinaSenzoraVjetra = scanner.nextLine();
 
 		System.out.println("Unesite vrijednost senzora vjetra");
-		BigDecimal vrijednost = scanner.nextBigDecimal();
-		scanner.nextLine();
+		BigDecimal vrijednost = Validator.unesiBigDecimal(scanner);
 
 		SenzorVjetra senzorVjetra = new SenzorVjetra(velicinaSenzoraVjetra);
 		senzorVjetra.setVrijednost(vrijednost);
@@ -132,8 +162,7 @@ public class Glavna {
 
 	private static SenzorVlage kreirajSenzorVlage(Scanner scanner) {
 		System.out.println("Unesite vrijednost senzora vlage:");
-		BigDecimal vrijednost = scanner.nextBigDecimal();
-		scanner.nextLine();
+		BigDecimal vrijednost = Validator.unesiBigDecimal(scanner);
 
 		SenzorVlage senzorVlage = new SenzorVlage();
 		senzorVlage.setVrijednost(vrijednost);
@@ -146,8 +175,7 @@ public class Glavna {
 		String nazivKonponente = scanner.nextLine();
 
 		System.out.println("Unesite vrijednost senzora temperature:");
-		BigDecimal vrijednost = scanner.nextBigDecimal();
-		scanner.nextLine();
+		BigDecimal vrijednost = Validator.unesiBigDecimal(scanner);
 
 		SenzorTemperature senzorTemperature = new SenzorTemperature(nazivKonponente);
 		senzorTemperature.setVrijednost(vrijednost);
@@ -166,7 +194,7 @@ public class Glavna {
 
 		return new MjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
 	}
-	
+
 	public static MjernaPostaja kreirajRadioSondaznuMjernuPostaju(Scanner scanner) {
 
 		System.out.println("Unesite naziv radio sondažne mjerne postaje:");
