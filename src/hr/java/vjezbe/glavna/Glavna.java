@@ -51,6 +51,7 @@ public class Glavna {
 
 		System.out.println("Unesite površinu države:");
 		BigDecimal povrsinaDrzave = scanner.nextBigDecimal();
+		scanner.nextLine();
 		
 		return new Drzava(nazivDrzave, povrsinaDrzave);
 	}
