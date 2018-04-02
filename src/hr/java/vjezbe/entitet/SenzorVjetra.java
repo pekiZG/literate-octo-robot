@@ -2,17 +2,17 @@ package hr.java.vjezbe.entitet;
 
 public class SenzorVjetra extends Senzor {
 
-	String opisJacineVjetra;
+	String velicinaSenzoraVjetra;
 
-	public SenzorVjetra(String opisJacineVjetra) {
+	public SenzorVjetra(String velicinaSenzoraVjetra) {
 		super(new String("km/h"), (byte) Integer.parseInt("3"));
-		this.opisJacineVjetra = opisJacineVjetra;
+		this.velicinaSenzoraVjetra = velicinaSenzoraVjetra;
 	}
 
 	@Override
 	public String dohvatiPodatkeSenzora() {
 
-		return "Veličina: " + opisJacineVjetra + ", vrijednost: " + super.getVrijednost().toString() + " "
+		return "Veličina: " + velicinaSenzoraVjetra + ", vrijednost: " + super.getVrijednost().toString() + " "
 				+ super.getMjernaJedinica().toString();
 
 	}

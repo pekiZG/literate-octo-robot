@@ -1,32 +1,41 @@
 package hr.java.vjezbe.glavna;
 
-import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.Scanner;
-import java.util.jar.Attributes.Name;
-
 import hr.java.vjezbe.entitet.Drzava;
 import hr.java.vjezbe.entitet.GeografskaTocka;
 import hr.java.vjezbe.entitet.MjernaPostaja;
 import hr.java.vjezbe.entitet.Mjesto;
+import hr.java.vjezbe.entitet.RadioSondaznaMjernaPostaja;
+import hr.java.vjezbe.entitet.Senzor;
+import hr.java.vjezbe.entitet.SenzorTemperature;
+import hr.java.vjezbe.entitet.SenzorVjetra;
+import hr.java.vjezbe.entitet.SenzorVlage;
 import hr.java.vjezbe.entitet.Zupanija;
 
 public class Glavna {
 
-	private static final int BROJ_MJERNIH_POSTAJA = 3;
+	private static final int BROJ_KLASICNIH_MJERNIH_POSTAJA = 2;
+	private static final int BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA = 1;
 
 	public static void main(String[] args) {
 
 		Scanner scanner = new Scanner(System.in);
 
-		MjernaPostaja[] mjernePostaje = new MjernaPostaja[3];
+		Integer brojMjernihPostaja = BROJ_KLASICNIH_MJERNIH_POSTAJA + BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA;
+		MjernaPostaja[] mjernePostaje = new MjernaPostaja[brojMjernihPostaja];
 
 		// Create
-		for (int i = 0; i < BROJ_MJERNIH_POSTAJA; i++) {
+		for (int i = 0; i < brojMjernihPostaja; i++) {
 			System.out.println("Unesite " + (i + 1) + ". mjernu postaju:");
-			mjernePostaje[i] = kreirajMjernuPostaju(scanner);
+			
+			if (i < BROJ_KLASICNIH_MJERNIH_POSTAJA) {
+				mjernePostaje[i] = kreirajKlasicnuMjernuPostaju(scanner);	
+			}else {
+				mjernePostaje[i] = kreirajRadioSondaznuMjernuPostaju(scanner);
+			}
 		}
-		
+
 		// List out
 		for (int i = 0; i < mjernePostaje.length; i++) {
 			System.out.println("\n--------------------");
@@ -38,6 +47,12 @@ public class Glavna {
 
 			System.out.println("Točne koordinate postaje su x:" + mjernePostaje[i].getGeografskaTocka().getX() + " y:"
 					+ mjernePostaje[i].getGeografskaTocka().getY());
+
+			Senzor[] sortiraniSenzori = mjernePostaje[i].dohvatiSenzore();
+			for (int j = 0; j < sortiraniSenzori.length; j++) {
+				System.out.println(sortiraniSenzori[j].dohvatiPodatkeSenzora());
+			}
+
 		}
 
 		scanner.close();
@@ -45,39 +60,39 @@ public class Glavna {
 	}
 
 	public static Drzava kreirajDrzavu(Scanner scanner) {
-		
+
 		System.out.println("Unesite naziv države:");
 		String nazivDrzave = scanner.nextLine();
 
 		System.out.println("Unesite površinu države:");
 		BigDecimal povrsinaDrzave = scanner.nextBigDecimal();
 		scanner.nextLine();
-		
+
 		return new Drzava(nazivDrzave, povrsinaDrzave);
 	}
-	
+
 	public static Zupanija kreirajZupaniju(Scanner scanner) {
-		
+
 		Drzava drzava = kreirajDrzavu(scanner);
-		
+
 		System.out.println("Unesite naziv županije:");
 		String nazivZupanije = scanner.nextLine();
-		
+
 		return new Zupanija(nazivZupanije, drzava);
 	}
-	
+
 	public static Mjesto kreirajMjesto(Scanner scanner) {
-		
+
 		Zupanija zupanija = kreirajZupaniju(scanner);
-		
+
 		System.out.println("Unesite naziv mjesta:");
 		String nazivMjesta = scanner.nextLine();
-		
+
 		return new Mjesto(nazivMjesta, zupanija);
 	}
 
 	public static GeografskaTocka kreirajGeografskuTocku(Scanner scanner) {
-		
+
 		System.out.println("Unesite Geo koordinatu X:");
 		BigDecimal x = scanner.nextBigDecimal();
 		scanner.nextLine();
@@ -85,19 +100,83 @@ public class Glavna {
 		System.out.println("Unesite Geo koordinatu Y:");
 		BigDecimal y = scanner.nextBigDecimal();
 		scanner.nextLine();
-		
+
 		return new GeografskaTocka(x, y);
 	}
-	
-	public static MjernaPostaja kreirajMjernuPostaju(Scanner scanner) {
-		
+
+	public static Senzor[] kreirajSenzore(Scanner scanner) {
+
+		Senzor[] senzori = new Senzor[3];
+
+		senzori[0] = kreirajSenzorTemperature(scanner);
+		senzori[1] = kreirajSenzorVlage(scanner);
+		senzori[2] = kreirajSenzorVjetra(scanner);
+
+		return senzori;
+
+	}
+
+	private static SenzorVjetra kreirajSenzorVjetra(Scanner scanner) {
+		System.out.println("Unesite veličinu senzora brzine vjetra");
+		String velicinaSenzoraVjetra = scanner.nextLine();
+
+		System.out.println("Unesite vrijednost senzora vjetra");
+		BigDecimal vrijednost = scanner.nextBigDecimal();
+		scanner.nextLine();
+
+		SenzorVjetra senzorVjetra = new SenzorVjetra(velicinaSenzoraVjetra);
+		senzorVjetra.setVrijednost(vrijednost);
+
+		return senzorVjetra;
+	}
+
+	private static SenzorVlage kreirajSenzorVlage(Scanner scanner) {
+		System.out.println("Unesite vrijednost senzora vlage:");
+		BigDecimal vrijednost = scanner.nextBigDecimal();
+		scanner.nextLine();
+
+		SenzorVlage senzorVlage = new SenzorVlage();
+		senzorVlage.setVrijednost(vrijednost);
+
+		return senzorVlage;
+	}
+
+	private static SenzorTemperature kreirajSenzorTemperature(Scanner scanner) {
+		System.out.println("Unesite elektroničku komponentu za senzor temperature:");
+		String nazivKonponente = scanner.nextLine();
+
+		System.out.println("Unesite vrijednost senzora temperature:");
+		BigDecimal vrijednost = scanner.nextBigDecimal();
+		scanner.nextLine();
+
+		SenzorTemperature senzorTemperature = new SenzorTemperature(nazivKonponente);
+		senzorTemperature.setVrijednost(vrijednost);
+
+		return senzorTemperature;
+	}
+
+	public static MjernaPostaja kreirajKlasicnuMjernuPostaju(Scanner scanner) {
+
 		System.out.println("Unesite naziv mjerne postaje:");
 		String nazivMjernePostaje = scanner.nextLine();
-		
+
 		Mjesto mjesto = kreirajMjesto(scanner);
 		GeografskaTocka geografskaTocka = kreirajGeografskuTocku(scanner);
-		
-		return new MjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka);
+		Senzor[] senzori = kreirajSenzore(scanner);
+
+		return new MjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
 	}
 	
+	public static MjernaPostaja kreirajRadioSondaznuMjernuPostaju(Scanner scanner) {
+
+		System.out.println("Unesite naziv radio sondažne mjerne postaje:");
+		String nazivMjernePostaje = scanner.nextLine();
+
+		Mjesto mjesto = kreirajMjesto(scanner);
+		GeografskaTocka geografskaTocka = kreirajGeografskuTocku(scanner);
+		Senzor[] senzori = kreirajSenzore(scanner);
+
+		return new RadioSondaznaMjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
+	}
+
 }
