@@ -38,4 +38,6 @@ public abstract class Senzor {
 		this.vrijednost = vrijednost;
 	}
 	
+	public abstract String dohvatiPodatkeSenzora();
+	
 }
