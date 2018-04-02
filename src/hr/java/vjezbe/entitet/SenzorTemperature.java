@@ -5,14 +5,16 @@ public class SenzorTemperature extends Senzor {
 	String nazivKomponente;
 
 	public SenzorTemperature(String nazivKonponente) {
-		super(new String("C"), (byte) Integer.parseInt("2"));
+		super(new String("°C"), (byte) Integer.parseInt("2"));
 		this.nazivKomponente = nazivKonponente;
 	}
 
 	@Override
 	public String dohvatiPodatkeSenzora() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return "Komponenta: " + this.nazivKomponente + ", vrijednost: " + super.getVrijednost().toString() + " "
+				+ super.getVrijednost().toString();
+
 	}
 
 }
