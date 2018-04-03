@@ -23,6 +23,7 @@ public class Glavna {
 	private static final int BROJ_KLASICNIH_MJERNIH_POSTAJA = 2;
 	private static final int BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA = 1;
 
+	static { System.setProperty("logback.configurationFile", "logback.xml");}
 	private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
 	public static void main(String[] args) {
@@ -84,6 +85,7 @@ public class Glavna {
 
 			try {
 				Thread.sleep(1 * 1000);
+				logger.info("Spavam");
 			} catch (InterruptedException e) {
 				logger.error(e.getMessage());
 			}
