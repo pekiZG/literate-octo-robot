@@ -4,8 +4,8 @@ public class RadioSondaznaMjernaPostaja extends MjernaPostaja implements RadioSo
 
 	Integer visina;
 
-	public RadioSondaznaMjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, Senzor[] senzori) {
-		super(naziv, mjesto, geografskaTocka, senzori);
+	public RadioSondaznaMjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, Senzor[] senzori, Operater operater) {
+		super(naziv, mjesto, geografskaTocka, senzori, operater);
 		// TODO Auto-generated constructor stub
 	}
 

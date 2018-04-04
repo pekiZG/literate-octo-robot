@@ -7,13 +7,16 @@ public class MjernaPostaja {
 	Mjesto mjesto;
 	GeografskaTocka geografskaTocka;
 	Senzor[] senzori = null;
+	
+	Operater operater;
 
-	public MjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, Senzor[] senzori) {
+	public MjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, Senzor[] senzori, Operater operater) {
 		super();
 		this.naziv = naziv;
 		this.mjesto = mjesto;
 		this.geografskaTocka = geografskaTocka;
 		this.senzori = senzori;
+		this.operater = operater;
 	}
 
 	public String getNaziv() {
@@ -43,6 +46,10 @@ public class MjernaPostaja {
 	public Senzor[] dohvatiSenzore() {
 		Arrays.sort(this.senzori, (p1, p2) -> p1.getMjernaJedinica().compareTo(p2.getMjernaJedinica()));
 		return this.senzori;
+	}
+
+	public Operater getOperater() {
+		return operater;
 	}
 
 }

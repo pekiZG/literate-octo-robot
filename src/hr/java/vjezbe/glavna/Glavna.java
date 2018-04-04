@@ -1,11 +1,13 @@
 package hr.java.vjezbe.glavna;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Scanner;
 import hr.java.vjezbe.entitet.Drzava;
 import hr.java.vjezbe.entitet.GeografskaTocka;
 import hr.java.vjezbe.entitet.MjernaPostaja;
 import hr.java.vjezbe.entitet.Mjesto;
+import hr.java.vjezbe.entitet.Operater;
 import hr.java.vjezbe.entitet.RadioSondaznaMjernaPostaja;
 import hr.java.vjezbe.entitet.Senzor;
 import hr.java.vjezbe.entitet.SenzorTemperature;
@@ -14,6 +16,7 @@ import hr.java.vjezbe.entitet.SenzorVlage;
 import hr.java.vjezbe.entitet.Zupanija;
 import hr.java.vjezbe.iznimke.NiskaTemperaturaException;
 import hr.java.vjezbe.iznimke.VisokaTemperaturaException;
+import hr.java.vjezbe.util.OIB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,8 @@ public class Glavna {
 
 	private static final int BROJ_KLASICNIH_MJERNIH_POSTAJA = 2;
 	private static final int BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA = 1;
+	
+	private static MjernaPostaja[] mjernePostaje;
 
 	// static { System.setProperty("logback.configurationFile", "logback.xml");}
 	private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
@@ -29,9 +34,9 @@ public class Glavna {
 	public static void main(String[] args) {
 
 		Scanner scanner = new Scanner(System.in);
-
+		
 		Integer brojMjernihPostaja = BROJ_KLASICNIH_MJERNIH_POSTAJA + BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA;
-		MjernaPostaja[] mjernePostaje = new MjernaPostaja[brojMjernihPostaja];
+		mjernePostaje = new MjernaPostaja[brojMjernihPostaja];
 
 		// Create
 		for (int i = 0; i < brojMjernihPostaja; i++) {
@@ -42,12 +47,15 @@ public class Glavna {
 			} else {
 				mjernePostaje[i] = kreirajRadioSondaznuMjernuPostaju(scanner);
 			}
+	
 		}
 
 		// List out
 		for (int i = 0; i < mjernePostaje.length; i++) {
 			System.out.println("\n--------------------");
 			System.out.println("Naziv mjerne postaje: " + mjernePostaje[i].getNaziv());
+			
+			System.out.println("Operater" + mjernePostaje[i].getOperater().getOIB());
 
 			System.out.println("Postaja se nalazi u mjestu " + mjernePostaje[i].getMjesto().getNaziv() + ", županiji "
 					+ mjernePostaje[i].getMjesto().getZupanija().getNaziv() + ", državi "
@@ -202,7 +210,9 @@ public class Glavna {
 		GeografskaTocka geografskaTocka = kreirajGeografskuTocku(scanner);
 		Senzor[] senzori = kreirajSenzore(scanner);
 
-		return new MjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
+		Operater operater = kreirajOperatera(scanner);
+		
+		return new MjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori, operater);
 	}
 
 	public static MjernaPostaja kreirajRadioSondaznuMjernuPostaju(Scanner scanner) {
@@ -214,7 +224,68 @@ public class Glavna {
 		GeografskaTocka geografskaTocka = kreirajGeografskuTocku(scanner);
 		Senzor[] senzori = kreirajSenzore(scanner);
 
-		return new RadioSondaznaMjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
+		
+		Operater operater = kreirajOperatera(scanner);
+		
+		
+		return new RadioSondaznaMjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori, operater);
+	}
+	
+	private static Operater kreirajOperatera(Scanner scanner) {
+		System.out.println("Unesite operatera:");
+		
+		String oib = null;
+		do {
+			System.out.println("Unesi OIB:");
+			oib = scanner.nextLine();
+			
+			if (!OIB.checkOIB(oib)) {
+				System.out.println("OIB nije OK!");
+			}
+			
+			if (provjeriPostojiLiDupliOperater(oib)) {
+				System.out.println("Unešen je dupli OIB!");
+			}
+			
+		} while (!OIB.checkOIB(oib) || provjeriPostojiLiDupliOperater(oib));
+		
+		System.out.println("Unesi ime operatera:");
+		String ime = scanner.nextLine();
+		
+		System.out.println("Unesi prezime operatera:");
+		String prezime = scanner.nextLine();
+		Operater operater = new Operater(oib, ime, prezime);
+
+		return operater;
+	}
+	
+	
+	public static boolean provjeriPostojiLiDupliOperater(String oib) {
+		
+		boolean postojiDuplikat = false;
+		
+		for (int i = 0; i < mjernePostaje.length; i++) {
+			if (mjernePostaje[i] != null) {
+				
+				if (mjernePostaje[i].getOperater() != null) {
+					
+					if (mjernePostaje[i].getOperater().getOIB() != null) {
+						if (mjernePostaje[i].getOperater().getOIB().compareTo(oib) == 0) {
+							postojiDuplikat = true;
+							
+							boolean jednaki = Objects.equals(oib, mjernePostaje[i].getOperater().getOIB());
+							
+						}
+					}
+					
+
+				}
+				
+
+			}
+		}
+		
+		return postojiDuplikat;
 	}
 
 }
