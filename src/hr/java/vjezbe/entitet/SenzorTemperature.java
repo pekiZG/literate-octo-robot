@@ -3,7 +3,6 @@ package hr.java.vjezbe.entitet;
 import java.math.BigDecimal;
 import java.util.Random;
 
-import hr.java.vjezbe.glavna.Glavna;
 import hr.java.vjezbe.iznimke.NiskaTemperaturaException;
 import hr.java.vjezbe.iznimke.VisokaTemperaturaException;
 
@@ -37,11 +36,13 @@ public class SenzorTemperature extends Senzor {
 		super.setVrijednost(vrijednost);
 
 		if (nasumicmaVrijednost > 40) {
-			throw new VisokaTemperaturaException();
+			logger.warn("Opaca, Visoka temperatura");
+			throw new VisokaTemperaturaException("Jako visoka temperature");
 		}
 
 		if (nasumicmaVrijednost < -10) {
-			throw new NiskaTemperaturaException();
+			logger.warn("Opaca, Niska temperatura");
+			throw new NiskaTemperaturaException("Jako niska temperatura");
 		}
 	}
 

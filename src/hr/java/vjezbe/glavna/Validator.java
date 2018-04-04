@@ -12,7 +12,7 @@ public class Validator {
 				broj = scanner.nextInt();
 				scanner.nextLine();
 			} catch (Exception e) {
-				System.out.println("Nije unešen broj; pokušajte opet :)");
+				System.out.println("Nije unešen broj; pokušajte opet.");
 				scanner.nextLine();
 			}
 		}
@@ -26,7 +26,7 @@ public class Validator {
 				broj = scanner.nextBigDecimal();
 				scanner.nextLine();
 			} catch (Exception e) {
-				System.out.println("Nije unešen broj; pokušajte opet :)");
+				System.out.println("Nije unešen broj; pokušajte opet.");
 				scanner.nextLine();
 			}
 		}
