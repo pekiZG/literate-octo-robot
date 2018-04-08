@@ -7,11 +7,20 @@ public abstract class Senzor {
 	String mjernaJedinica;
 	Byte preciznost;
 	BigDecimal vrijednost;
+	RadSenzora radSenzora;
 
 	public Senzor(String mjernaJedinica, Byte preciznost) {
 		super();
 		this.mjernaJedinica = mjernaJedinica;
 		this.preciznost = preciznost;
+	}
+
+	public RadSenzora getRadSenzora() {
+		return radSenzora;
+	}
+
+	public void setRadSenzora(RadSenzora radSenzora) {
+		this.radSenzora = radSenzora;
 	}
 
 	public String getMjernaJedinica() {
