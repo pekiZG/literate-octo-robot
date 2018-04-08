@@ -980,3 +980,79 @@ hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
 hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
 	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
 	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:74)
+13481 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+13486 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+13487 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Visoka temperatura
+13488 [main] ERROR hr.java.vjezbe.glavna.Glavna - null
+hr.java.vjezbe.iznimke.VisokaTemperaturaException: Jako visoka temperature
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:40)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+14488 [main] INFO  hr.java.vjezbe.glavna.Glavna - Spavam
+14488 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+14489 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+14489 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+14489 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+14489 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+14490 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+15490 [main] INFO  hr.java.vjezbe.glavna.Glavna - Spavam
+15491 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+15491 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+16491 [main] INFO  hr.java.vjezbe.glavna.Glavna - Spavam
+16491 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+16492 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+16492 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+16492 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+17493 [main] INFO  hr.java.vjezbe.glavna.Glavna - Spavam
+17493 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+17493 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+18493 [main] INFO  hr.java.vjezbe.glavna.Glavna - Spavam
+18493 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+18493 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+18494 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+18494 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+18494 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+18494 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+19495 [main] INFO  hr.java.vjezbe.glavna.Glavna - Spavam
+19495 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Niska temperatura
+19496 [main] ERROR hr.java.vjezbe.glavna.Glavna - Ping
+hr.java.vjezbe.iznimke.NiskaTemperaturaException: Jako niska temperatura
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:45)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
+19496 [main] WARN  h.j.v.entitet.SenzorTemperature - Opaca, Visoka temperatura
+19496 [main] ERROR hr.java.vjezbe.glavna.Glavna - null
+hr.java.vjezbe.iznimke.VisokaTemperaturaException: Jako visoka temperature
+	at hr.java.vjezbe.entitet.SenzorTemperature.generirajVrijednost(SenzorTemperature.java:40)
+	at hr.java.vjezbe.glavna.Glavna.main(Glavna.java:80)
