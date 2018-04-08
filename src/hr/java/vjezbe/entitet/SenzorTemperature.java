@@ -20,7 +20,7 @@ public class SenzorTemperature extends Senzor {
 		this.nazivKomponente = nazivKonponente;
 	}
 
-	@Override
+	@Override // Ovo je dekorator
 	public String dohvatiPodatkeSenzora() {
 
 		return "Komponenta: " + this.nazivKomponente + ", vrijednost: " + super.getVrijednost().toString() + " "
