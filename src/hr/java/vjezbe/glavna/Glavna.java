@@ -2,10 +2,13 @@ package hr.java.vjezbe.glavna;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,23 +77,27 @@ public class Glavna {
 		}
 		
 		
-		// Ispis unikatnih županija
+		// Ispis jedinstvenih županija
 		System.out.println("Ispis sortiranih županija:");
 		List<Zupanija> listaZupanija = new ArrayList<>();
-		
-		//List<Zupanija> stream = mjernePostaje.stream()
-		//	.map(p -> p.getMjesto().getZupanija().getDrzava().getListaZupanija()
-		//		.stream().map(z -> new Zupanija(z.getNaziv(), z.getDrzava()))
-		//		.toArray()
-		//	);
 		
 		for (MjernaPostaja mjernaPostaja : mjernePostaje) {
 			listaZupanija.addAll(mjernaPostaja.getMjesto().getZupanija().getDrzava().getListaZupanija()); 
 		}
 		
 		listaZupanija.sort(new ZupanijaSorter());
-		listaZupanija.forEach(z -> System.out.println(z.getNaziv()));
-
+		
+		Map<String, String> mapaJedinstvenihZupanija = new HashMap<>(); 
+		
+		for (Zupanija zupanija : listaZupanija) {
+			if (!mapaJedinstvenihZupanija.containsKey(zupanija.getNaziv())) {
+				mapaJedinstvenihZupanija.put(zupanija.getNaziv(), zupanija.getNaziv());
+			}
+		}
+		
+		mapaJedinstvenihZupanija.forEach((a,b) -> System.out.println(b));
+		
+		
 		
 		while (true) {
 			System.out.println("Generiram nasumične vrijednost senzora temperature");
