@@ -98,6 +98,31 @@ public class Glavna {
 		mapaJedinstvenihZupanija.forEach((a,b) -> System.out.println(b));
 		
 		
+		// Ispis mape mjernih postaja sa vrijednostima senzora
+		Map<Mjesto, List<Senzor>> collect = mjernePostaje.stream().collect(Collectors.toMap(MjernaPostaja::getMjesto, MjernaPostaja::dohvatiSenzore,
+	             (mp1, mp2) -> {
+	                 //System.out.println("duplicate key found!");
+	                 return mp1;
+	             }));
+		
+		for (Mjesto mjesto : collect.keySet()) {
+			System.out.println("U mjestu "+ mjesto.getNaziv() +" su sljedeći senzori:");
+			for (Senzor senzor : collect.get(mjesto)) {
+				if (senzor instanceof SenzorTemperature) {
+					System.out.println("Senzor temperature");	
+				}
+				if (senzor instanceof SenzorVjetra) {
+					System.out.println("Senzor vjetra");
+				}
+				if (senzor instanceof SenzorVlage) {
+					System.out.println("Senzor vlage");
+				}
+				
+			}
+		}
+		
+
+		
 		
 		while (true) {
 			System.out.println("Generiram nasumične vrijednost senzora temperature");
