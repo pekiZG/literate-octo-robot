@@ -6,7 +6,6 @@ public class RadioSondaznaMjernaPostaja extends MjernaPostaja implements RadioSo
 
 	public RadioSondaznaMjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, Senzor[] senzori) {
 		super(naziv, mjesto, geografskaTocka, senzori);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

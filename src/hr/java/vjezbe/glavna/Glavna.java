@@ -1,16 +1,19 @@
 package hr.java.vjezbe.glavna;
 
 import java.math.BigDecimal;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import hr.java.vjezbe.entitet.Drzava;
 import hr.java.vjezbe.entitet.GeografskaTocka;
 import hr.java.vjezbe.entitet.MjernaPostaja;
 import hr.java.vjezbe.entitet.Mjesto;
+import hr.java.vjezbe.entitet.RadSenzora;
 import hr.java.vjezbe.entitet.RadioSondaznaMjernaPostaja;
 import hr.java.vjezbe.entitet.Senzor;
 import hr.java.vjezbe.entitet.SenzorTemperature;
 import hr.java.vjezbe.entitet.SenzorVjetra;
 import hr.java.vjezbe.entitet.SenzorVlage;
+import hr.java.vjezbe.entitet.VrstaMjesta;
 import hr.java.vjezbe.entitet.Zupanija;
 import hr.java.vjezbe.iznimke.NiskaTemperaturaException;
 import hr.java.vjezbe.iznimke.VisokaTemperaturaException;
@@ -75,15 +78,15 @@ public class Glavna {
 						} catch (VisokaTemperaturaException e) {
 							System.out.println("Dogodila se greška: " + e.getMessage());
 							System.out.println("Na mjernoj postaji: " + mjernePostaje[i].getNaziv());
-							
+
 							logger.error(null, null, null, e);
-							
+
 						} catch (NiskaTemperaturaException e) {
 							System.out.println("Dogodila se greška: " + e.getMessage());
 							System.out.println("Na mjernoj postaji: " + mjernePostaje[i].getNaziv());
-							
+
 							logger.error("Ping", null, null, e);
-							
+
 						}
 					}
 				}
@@ -101,6 +104,34 @@ public class Glavna {
 
 		// scanner.close();
 
+	}
+
+	private static RadSenzora kreirajRadSenzora(Scanner scanner) {
+		for (int i = 0; i < RadSenzora.values().length - 1; i++) {
+			System.out.println((i + 1) + ". " + RadSenzora.values()[i]);
+		}
+
+		Integer redniBrojSenzora = null;
+
+		while (true) {
+			System.out.print("Odabir rada senzora >> ");
+			try {
+				redniBrojSenzora = scanner.nextInt();
+				break;
+			} catch (InputMismatchException ex) {
+				System.out.println("Neispravan unos!");
+				logger.error("Neispravan unos rada senzora!", ex);
+			}
+		}
+
+		RadSenzora radSenzora;
+		if (redniBrojSenzora >= 1 && redniBrojSenzora < RadSenzora.values().length) {
+			radSenzora = RadSenzora.values()[redniBrojSenzora - 1];
+		} else {
+			radSenzora = RadSenzora.OSTALO;
+		}
+		
+		return radSenzora;
 	}
 
 	public static Drzava kreirajDrzavu(Scanner scanner) {
@@ -131,7 +162,42 @@ public class Glavna {
 		System.out.println("Unesite naziv mjesta:");
 		String nazivMjesta = scanner.nextLine();
 
-		return new Mjesto(nazivMjesta, zupanija);
+		Mjesto mjesto = new Mjesto(nazivMjesta, zupanija);
+		
+		VrstaMjesta vrstaMjesta = kreirajVrstuMjesta(scanner);
+		mjesto.setVrstaMjesta(vrstaMjesta);
+		
+		return mjesto;		
+	}
+
+	private static VrstaMjesta kreirajVrstuMjesta(Scanner scanner) {
+		
+		for (int i = 0; i < VrstaMjesta.values().length - 1; i++) {
+			System.out.println((i + 1) + ". " + VrstaMjesta.values()[i]);
+		}
+
+		
+		Integer redniBrojSenzora = null;
+		while (true) {
+			System.out.print("Odabir vrste mjesta >> ");
+			try {
+				redniBrojSenzora = scanner.nextInt();
+				break;
+			} catch (InputMismatchException ex) {
+				System.out.println("Neispravan unos!");
+				logger.error("Neispravan unos rada senzora!", ex);
+			}
+		}
+
+		
+		VrstaMjesta vrstaMjesta;
+		if (redniBrojSenzora >= 1 && redniBrojSenzora < RadSenzora.values().length) {
+			vrstaMjesta = VrstaMjesta.values()[redniBrojSenzora - 1];
+		} else {
+			vrstaMjesta = VrstaMjesta.OSTALO;
+		}
+		
+		return vrstaMjesta;
 	}
 
 	public static GeografskaTocka kreirajGeografskuTocku(Scanner scanner) {
@@ -166,6 +232,9 @@ public class Glavna {
 
 		SenzorVjetra senzorVjetra = new SenzorVjetra(velicinaSenzoraVjetra);
 		senzorVjetra.setVrijednost(vrijednost);
+		
+		RadSenzora radSenzora = kreirajRadSenzora(scanner);
+		senzorVjetra.setRadSenzora(radSenzora);
 
 		return senzorVjetra;
 	}
@@ -177,6 +246,9 @@ public class Glavna {
 		SenzorVlage senzorVlage = new SenzorVlage();
 		senzorVlage.setVrijednost(vrijednost);
 
+		RadSenzora radSenzora = kreirajRadSenzora(scanner);
+		senzorVlage.setRadSenzora(radSenzora);
+		
 		return senzorVlage;
 	}
 
@@ -189,7 +261,10 @@ public class Glavna {
 
 		SenzorTemperature senzorTemperature = new SenzorTemperature(nazivKonponente);
 		senzorTemperature.setVrijednost(vrijednost);
-
+		
+		RadSenzora radSenzora = kreirajRadSenzora(scanner);
+		senzorTemperature.setRadSenzora(radSenzora);
+		
 		return senzorTemperature;
 	}
 
