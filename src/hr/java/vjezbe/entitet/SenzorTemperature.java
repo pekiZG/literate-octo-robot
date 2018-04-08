@@ -24,7 +24,7 @@ public class SenzorTemperature extends Senzor {
 	public String dohvatiPodatkeSenzora() {
 
 		return "Komponenta: " + this.nazivKomponente + ", vrijednost: " + super.getVrijednost().toString() + " "
-				+ super.getMjernaJedinica().toString();
+				+ super.getMjernaJedinica().toString() + ", Način rada: " + super.getRadSenzora().name()  ;
 
 	}
 

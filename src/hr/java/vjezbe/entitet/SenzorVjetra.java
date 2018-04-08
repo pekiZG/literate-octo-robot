@@ -13,7 +13,7 @@ public class SenzorVjetra extends Senzor {
 	public String dohvatiPodatkeSenzora() {
 
 		return "Veličina: " + velicinaSenzoraVjetra + ", vrijednost: " + super.getVrijednost().toString() + " "
-				+ super.getMjernaJedinica().toString();
+				+ super.getMjernaJedinica().toString() + ", Način rada: " + super.getRadSenzora().name();
 
 	}
 

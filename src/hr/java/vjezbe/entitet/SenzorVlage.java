@@ -10,7 +10,7 @@ public class SenzorVlage extends Senzor {
 	public String dohvatiPodatkeSenzora() {
 
 		return "Vrijednost: " + super.getVrijednost().toString() + " " + super.getMjernaJedinica().toString()
-				+ "vlage zraka";
+				+ "vlage zraka, Način rada: " + super.getRadSenzora().name();
 
 	}
 
