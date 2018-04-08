@@ -1,14 +1,19 @@
 package hr.java.vjezbe.entitet;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Mjesto {
 	String naziv;
 	Zupanija zupanija;
 	VrstaMjesta vrstaMjesta;
+	List<MjernaPostaja> listaMjernihPostaja;
 
 	public Mjesto(String naziv, Zupanija zupanija) {
 		super();
 		this.naziv = naziv;
 		this.zupanija = zupanija;
+		this.listaMjernihPostaja = new ArrayList<>();
 	}
 
 	public VrstaMjesta getVrstaMjesta() {
@@ -35,4 +40,8 @@ public class Mjesto {
 		this.zupanija = zupanija;
 	}
 
+	public List<MjernaPostaja> getListaMjernihPostaja() {
+		return listaMjernihPostaja;
+	}
+	
 }

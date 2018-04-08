@@ -1,6 +1,5 @@
 package hr.java.vjezbe.entitet;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MjernaPostaja {

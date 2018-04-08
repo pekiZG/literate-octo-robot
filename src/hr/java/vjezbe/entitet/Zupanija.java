@@ -1,13 +1,18 @@
 package hr.java.vjezbe.entitet;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Zupanija {
 	String naziv;
 	Drzava drzava;
+	List<Mjesto> listaMjesta;
 
 	public Zupanija(String naziv, Drzava drzava) {
 		super();
 		this.naziv = naziv;
 		this.drzava = drzava;
+		this.listaMjesta = new ArrayList<>();
 	}
 
 	public String getNaziv() {
@@ -26,4 +31,8 @@ public class Zupanija {
 		this.drzava = drzava;
 	}
 
+	public List<Mjesto> getListaMjesta() {
+		return listaMjesta;
+	}
+	
 }
