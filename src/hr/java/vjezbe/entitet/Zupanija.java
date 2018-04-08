@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Zupanija {
-	String naziv;
-	Drzava drzava;
-	List<Mjesto> listaMjesta;
+	private String naziv;
+	private Drzava drzava;
+	private List<Mjesto> listaMjesta;
 
 	public Zupanija(String naziv, Drzava drzava) {
 		super();

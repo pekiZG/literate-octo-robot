@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 public abstract class Senzor {
 
-	String mjernaJedinica;
-	Byte preciznost;
-	BigDecimal vrijednost;
-	RadSenzora radSenzora;
+	private String mjernaJedinica;
+	private Byte preciznost;
+	private BigDecimal vrijednost;
+	private RadSenzora radSenzora;
 
 	public Senzor(String mjernaJedinica, Byte preciznost) {
 		super();

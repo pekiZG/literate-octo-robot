@@ -3,7 +3,7 @@ package hr.java.vjezbe.entitet;
 import java.math.BigDecimal;
 
 public class GeografskaTocka {
-	BigDecimal x, y;
+	private BigDecimal x, y;
 
 	public GeografskaTocka(BigDecimal x, BigDecimal y) {
 		super();

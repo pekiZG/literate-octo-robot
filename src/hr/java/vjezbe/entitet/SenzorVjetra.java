@@ -2,7 +2,7 @@ package hr.java.vjezbe.entitet;
 
 public class SenzorVjetra extends Senzor {
 
-	String velicinaSenzoraVjetra;
+	private String velicinaSenzoraVjetra;
 
 	public SenzorVjetra(String velicinaSenzoraVjetra) {
 		super(new String("km/h"), (byte) Integer.parseInt("3"));

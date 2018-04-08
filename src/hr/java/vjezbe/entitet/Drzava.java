@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Drzava {
-	String naziv;
-	BigDecimal povrsina;
-	List<Zupanija> listaZupanija;
+	private String naziv;
+	private BigDecimal povrsina;
+	private List<Zupanija> listaZupanija;
 
 	public Drzava(String naziv, BigDecimal povrsina) {
 		super();

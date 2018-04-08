@@ -4,7 +4,7 @@ import java.util.List;
 
 public class RadioSondaznaMjernaPostaja extends MjernaPostaja implements RadioSondazna {
 
-	Integer visina;
+	private Integer visina;
 
 	public RadioSondaznaMjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, List<Senzor> senzori) {
 		super(naziv, mjesto, geografskaTocka, senzori);

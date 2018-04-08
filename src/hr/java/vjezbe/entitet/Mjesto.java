@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mjesto {
-	String naziv;
-	Zupanija zupanija;
-	VrstaMjesta vrstaMjesta;
-	List<MjernaPostaja> listaMjernihPostaja;
+	private String naziv;
+	private Zupanija zupanija;
+	private VrstaMjesta vrstaMjesta;
+	private List<MjernaPostaja> listaMjernihPostaja;
 
 	public Mjesto(String naziv, Zupanija zupanija) {
 		super();

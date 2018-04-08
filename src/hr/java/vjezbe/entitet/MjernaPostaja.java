@@ -3,10 +3,10 @@ package hr.java.vjezbe.entitet;
 import java.util.List;
 
 public class MjernaPostaja {
-	String naziv;
-	Mjesto mjesto;
-	GeografskaTocka geografskaTocka;
-	List<Senzor> senzori = null;
+	private String naziv;
+	private Mjesto mjesto;
+	private GeografskaTocka geografskaTocka;
+	private List<Senzor> senzori = null;
 
 	public MjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, List<Senzor> senzori) {
 		super();

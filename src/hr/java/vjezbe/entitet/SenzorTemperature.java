@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class SenzorTemperature extends Senzor {
 
-	String nazivKomponente;
+	private String nazivKomponente;
 
 	private static final Logger logger = LoggerFactory.getLogger(SenzorTemperature.class);
 
