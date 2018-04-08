@@ -6,6 +6,10 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hr.java.vjezbe.entitet.Drzava;
 import hr.java.vjezbe.entitet.GeografskaTocka;
 import hr.java.vjezbe.entitet.MjernaPostaja;
@@ -20,9 +24,7 @@ import hr.java.vjezbe.entitet.VrstaMjesta;
 import hr.java.vjezbe.entitet.Zupanija;
 import hr.java.vjezbe.iznimke.NiskaTemperaturaException;
 import hr.java.vjezbe.iznimke.VisokaTemperaturaException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import hr.java.vjezbe.sortiranje.ZupanijaSorter;
 
 public class Glavna {
 
@@ -34,7 +36,7 @@ public class Glavna {
 	private static List<MjernaPostaja> mjernePostaje;
 
 	public static void main(String[] args) {
-
+		
 		Scanner scanner = new Scanner(System.in);
 
 		Integer brojMjernihPostaja = BROJ_KLASICNIH_MJERNIH_POSTAJA + BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA;
@@ -51,7 +53,7 @@ public class Glavna {
 				mjernePostaje.add(kreirajRadioSondaznuMjernuPostaju(scanner));
 			}
 		}
-
+		
 		// List out
 		for (MjernaPostaja mjernaPostaja : mjernePostaje) {
 			System.out.println("\n--------------------");
@@ -70,7 +72,26 @@ public class Glavna {
 				System.out.println(senzor.dohvatiPodatkeSenzora());
 			}
 		}
+		
+		
+		// Ispis unikatnih županija
+		System.out.println("Ispis sortiranih županija:");
+		List<Zupanija> listaZupanija = new ArrayList<>();
+		
+		//List<Zupanija> stream = mjernePostaje.stream()
+		//	.map(p -> p.getMjesto().getZupanija().getDrzava().getListaZupanija()
+		//		.stream().map(z -> new Zupanija(z.getNaziv(), z.getDrzava()))
+		//		.toArray()
+		//	);
+		
+		for (MjernaPostaja mjernaPostaja : mjernePostaje) {
+			listaZupanija.addAll(mjernaPostaja.getMjesto().getZupanija().getDrzava().getListaZupanija()); 
+		}
+		
+		listaZupanija.sort(new ZupanijaSorter());
+		listaZupanija.forEach(z -> System.out.println(z.getNaziv()));
 
+		
 		while (true) {
 			System.out.println("Generiram nasumične vrijednost senzora temperature");
 			for (MjernaPostaja mjernaPostaja : mjernePostaje) {
@@ -168,7 +189,7 @@ public class Glavna {
 
 		Zupanija zupanija = new Zupanija(nazivZupanije, drzava);
 		drzava.getListaZupanija().add(zupanija); 
-		
+					
 		return zupanija;
 	}
 
