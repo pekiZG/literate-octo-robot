@@ -4,8 +4,8 @@ public class SenzorVjetra extends Senzor {
 
 	String velicinaSenzoraVjetra;
 
-	public SenzorVjetra(String velicinaSenzoraVjetra) {
-		super(new String("km/h"), (byte) Integer.parseInt("3"));
+	public SenzorVjetra(String velicinaSenzoraVjetra, RadSenzora radSenzora) {
+		super(new String("km/h"), (byte) Integer.parseInt("3"), radSenzora);
 		this.velicinaSenzoraVjetra = velicinaSenzoraVjetra;
 	}
 

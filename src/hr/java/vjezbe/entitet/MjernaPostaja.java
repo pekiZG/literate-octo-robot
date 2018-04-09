@@ -1,14 +1,15 @@
 package hr.java.vjezbe.entitet;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class MjernaPostaja {
 	String naziv;
 	Mjesto mjesto;
 	GeografskaTocka geografskaTocka;
-	Senzor[] senzori = null;
+	List<Senzor> senzori = null;
 
-	public MjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, Senzor[] senzori) {
+	public MjernaPostaja(String naziv, Mjesto mjesto, GeografskaTocka geografskaTocka, List<Senzor> senzori) {
 		super();
 		this.naziv = naziv;
 		this.mjesto = mjesto;
@@ -40,8 +41,8 @@ public class MjernaPostaja {
 		this.geografskaTocka = geografskaTocka;
 	}
 
-	public Senzor[] dohvatiSenzore() {
-		Arrays.sort(this.senzori, (p1, p2) -> p1.getMjernaJedinica().compareTo(p2.getMjernaJedinica()));
+	public List<Senzor> dohvatiSenzore() {
+		senzori.sort((p1, p2) -> p1.getMjernaJedinica().compareTo(p2.getMjernaJedinica()));
 		return this.senzori;
 	}
 

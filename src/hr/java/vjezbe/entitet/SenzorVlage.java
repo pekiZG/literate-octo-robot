@@ -2,8 +2,8 @@ package hr.java.vjezbe.entitet;
 
 public class SenzorVlage extends Senzor {
 
-	public SenzorVlage() {
-		super(new String("%"), (byte) Integer.parseInt("1"));
+	public SenzorVlage(RadSenzora radSenzora) {
+		super(new String("%"), (byte) Integer.parseInt("1"), radSenzora);
 	}
 
 	@Override

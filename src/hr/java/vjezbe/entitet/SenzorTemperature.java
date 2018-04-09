@@ -15,8 +15,8 @@ public class SenzorTemperature extends Senzor {
 
 	private static final Logger logger = LoggerFactory.getLogger(SenzorTemperature.class);
 
-	public SenzorTemperature(String nazivKonponente) {
-		super(new String("°C"), (byte) Integer.parseInt("2"));
+	public SenzorTemperature(String nazivKonponente, RadSenzora radSenzora) {
+		super(new String("°C"), (byte) Integer.parseInt("2"), radSenzora);
 		this.nazivKomponente = nazivKonponente;
 	}
 

@@ -1,19 +1,30 @@
 package hr.java.vjezbe.glavna;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 import hr.java.vjezbe.entitet.Drzava;
 import hr.java.vjezbe.entitet.GeografskaTocka;
 import hr.java.vjezbe.entitet.MjernaPostaja;
 import hr.java.vjezbe.entitet.Mjesto;
+import hr.java.vjezbe.entitet.RadSenzora;
 import hr.java.vjezbe.entitet.RadioSondaznaMjernaPostaja;
 import hr.java.vjezbe.entitet.Senzor;
 import hr.java.vjezbe.entitet.SenzorTemperature;
 import hr.java.vjezbe.entitet.SenzorVjetra;
 import hr.java.vjezbe.entitet.SenzorVlage;
+import hr.java.vjezbe.entitet.VrstaMjesta;
 import hr.java.vjezbe.entitet.Zupanija;
 import hr.java.vjezbe.iznimke.NiskaTemperaturaException;
 import hr.java.vjezbe.iznimke.VisokaTemperaturaException;
+import hr.java.vjezbe.sortiranje.ZupanijaSorter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,65 +36,117 @@ public class Glavna {
 
 	// static { System.setProperty("logback.configurationFile", "logback.xml");}
 	private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
+	private static List<MjernaPostaja> mjernePostaje;
 
 	public static void main(String[] args) {
 
 		Scanner scanner = new Scanner(System.in);
 
 		Integer brojMjernihPostaja = BROJ_KLASICNIH_MJERNIH_POSTAJA + BROJ_RADIO_SONDAZNIH_MJERNIH_POSTAJA;
-		MjernaPostaja[] mjernePostaje = new MjernaPostaja[brojMjernihPostaja];
+		mjernePostaje = new ArrayList<>();
 
 		// Create
 		for (int i = 0; i < brojMjernihPostaja; i++) {
 			System.out.println("Unesite " + (i + 1) + ". mjernu postaju:");
 
 			if (i < BROJ_KLASICNIH_MJERNIH_POSTAJA) {
-				mjernePostaje[i] = kreirajKlasicnuMjernuPostaju(scanner);
+				mjernePostaje.add(kreirajKlasicnuMjernuPostaju(scanner));
 			} else {
-				mjernePostaje[i] = kreirajRadioSondaznuMjernuPostaju(scanner);
+				mjernePostaje.add(kreirajRadioSondaznuMjernuPostaju(scanner));
 			}
 		}
 
 		// List out
-		for (int i = 0; i < mjernePostaje.length; i++) {
+		for (MjernaPostaja mjernaPostaja : mjernePostaje) {
 			System.out.println("\n--------------------");
-			System.out.println("Naziv mjerne postaje: " + mjernePostaje[i].getNaziv());
+			System.out.println("Naziv mjerne postaje: " + mjernaPostaja.getNaziv());
 
-			System.out.println("Postaja se nalazi u mjestu " + mjernePostaje[i].getMjesto().getNaziv() + ", županiji "
-					+ mjernePostaje[i].getMjesto().getZupanija().getNaziv() + ", državi "
-					+ mjernePostaje[i].getMjesto().getZupanija().getDrzava().getNaziv());
+			System.out.println("Postaja se nalazi u mjestu " + mjernaPostaja.getMjesto().getNaziv() + ", županiji "
+					+ mjernaPostaja.getMjesto().getZupanija().getNaziv() + ", državi "
+					+ mjernaPostaja.getMjesto().getZupanija().getDrzava().getNaziv());
 
-			System.out.println("Točne koordinate postaje su x:" + mjernePostaje[i].getGeografskaTocka().getX() + " y:"
-					+ mjernePostaje[i].getGeografskaTocka().getY());
+			System.out.println("Točne koordinate postaje su x:" + mjernaPostaja.getGeografskaTocka().getX() + " y:"
+					+ mjernaPostaja.getGeografskaTocka().getY());
 
-			Senzor[] sortiraniSenzori = mjernePostaje[i].dohvatiSenzore();
-			for (int j = 0; j < sortiraniSenzori.length; j++) {
-				System.out.println(sortiraniSenzori[j].dohvatiPodatkeSenzora());
+			List<Senzor> sortiraniSenzori = mjernaPostaja.dohvatiSenzore();
+
+			for (Senzor senzor : sortiraniSenzori) {
+				System.out.println(senzor.dohvatiPodatkeSenzora());
 			}
 
 		}
 
+		
+		// Ispis sortiranih zupanija bez duplikata
+		System.out.println("Ispis sortiranih županija:");
+		
+		List<Zupanija> listaSvihZupanijaIzDrzava = new ArrayList<>();
+		for (MjernaPostaja mjernaPostaja : mjernePostaje) {
+			listaSvihZupanijaIzDrzava.addAll(mjernaPostaja.getMjesto().getZupanija().getDrzava().getZupanije());
+		}
+
+		Map<String, Zupanija> mapaJedinstvenihZupanija = new HashMap<>();
+		for (Zupanija zupanija : listaSvihZupanijaIzDrzava) {
+			if (!mapaJedinstvenihZupanija.containsKey(zupanija.getNaziv())) {
+				mapaJedinstvenihZupanija.put(zupanija.getNaziv(), zupanija);
+			}
+		}
+		
+		List<Zupanija> listaJedinstvenihZupanijaIzDrzava = new ArrayList<>();
+		mapaJedinstvenihZupanija.forEach((a, b) -> listaJedinstvenihZupanijaIzDrzava.add(b));
+		
+		listaJedinstvenihZupanijaIzDrzava.sort(new ZupanijaSorter());
+		
+		listaJedinstvenihZupanijaIzDrzava.forEach(System.out::println);
+
+
+		// Ispis mape mjernih postaja sa vrijednostima senzora
+		Map<Mjesto, List<Senzor>> collect = mjernePostaje.stream()
+				.collect(Collectors.toMap(MjernaPostaja::getMjesto, MjernaPostaja::dohvatiSenzore,
+						(mp1, mp2) -> {
+							System.out.println("Dupli ključevi");
+							return mp1;
+						}));
+
+		for (Mjesto mjesto : collect.keySet()) {
+			System.out.println("U mjestu " + mjesto + " su sljedeći senzori:");
+			for (Senzor senzor : collect.get(mjesto)) {
+				if (senzor instanceof SenzorTemperature) {
+					System.out.println("Senzor temperature");
+				}
+				if (senzor instanceof SenzorVjetra) {
+					System.out.println("Senzor brzine vjetra");
+				}
+				if (senzor instanceof SenzorVlage) {
+					System.out.println("Senzor vlage");
+				}
+			}
+
+		}
+
+		
+		// generiranje nasumičnih vrijednost
 		while (true) {
 			System.out.println("Generiram nasumične vrijednost senzora temperature");
-			for (int i = 0; i < mjernePostaje.length; i++) {
-				Senzor[] senzori = mjernePostaje[i].dohvatiSenzore();
-				for (int j = 0; j < senzori.length; j++) {
-					if (senzori[j] instanceof SenzorTemperature) {
-						SenzorTemperature senzorTemperature = (SenzorTemperature) senzori[j];
+			for (MjernaPostaja mjernaPostaja : mjernePostaje) {
+				List<Senzor> senzori = mjernaPostaja.dohvatiSenzore();
+				for (Senzor senzor : senzori) {
+					if (senzor instanceof SenzorTemperature) {
+						SenzorTemperature senzorTemperature = (SenzorTemperature) senzor;
 						try {
 							senzorTemperature.generirajVrijednost();
 						} catch (VisokaTemperaturaException e) {
 							System.out.println("Dogodila se greška: " + e.getMessage());
-							System.out.println("Na mjernoj postaji: " + mjernePostaje[i].getNaziv());
-							
+							System.out.println("Na mjernoj postaji: " + mjernaPostaja.getNaziv());
+
 							logger.error(null, null, null, e);
-							
+
 						} catch (NiskaTemperaturaException e) {
 							System.out.println("Dogodila se greška: " + e.getMessage());
-							System.out.println("Na mjernoj postaji: " + mjernePostaje[i].getNaziv());
-							
+							System.out.println("Na mjernoj postaji: " + mjernaPostaja.getNaziv());
+
 							logger.error("Ping", null, null, e);
-							
+
 						}
 					}
 				}
@@ -117,21 +180,63 @@ public class Glavna {
 	public static Zupanija kreirajZupaniju(Scanner scanner) {
 
 		Drzava drzava = kreirajDrzavu(scanner);
-
 		System.out.println("Unesite naziv županije:");
 		String nazivZupanije = scanner.nextLine();
 
-		return new Zupanija(nazivZupanije, drzava);
+		Optional<MjernaPostaja> postaja = mjernePostaje.stream()
+				.filter(p -> p.getMjesto().getZupanija().getNaziv().equals(nazivZupanije)).findFirst();
+		if (postaja.isPresent())
+			return postaja.get().getMjesto().getZupanija();
+
+		Zupanija zupanija = new Zupanija(nazivZupanije, drzava);
+		drzava.getZupanije().add(zupanija);
+
+		return zupanija;
 	}
 
 	public static Mjesto kreirajMjesto(Scanner scanner) {
 
 		Zupanija zupanija = kreirajZupaniju(scanner);
-
 		System.out.println("Unesite naziv mjesta:");
 		String nazivMjesta = scanner.nextLine();
 
-		return new Mjesto(nazivMjesta, zupanija);
+		Optional<MjernaPostaja> postaja = mjernePostaje.stream()
+				.filter(p -> p.getMjesto().getNaziv().equals(nazivMjesta)).findFirst();
+		if (postaja.isPresent())
+			return postaja.get().getMjesto();
+
+		VrstaMjesta vrstaMjesta = kreirajVrstuMjesta(scanner);
+		Mjesto mjesto = new Mjesto(nazivMjesta, zupanija, vrstaMjesta);
+		zupanija.getMjesta().add(mjesto);
+
+		return mjesto;
+	}
+
+	private static VrstaMjesta kreirajVrstuMjesta(Scanner scanner) {
+		VrstaMjesta vrstaMjesta;
+		for (int i = 0; i < VrstaMjesta.values().length - 1; i++) {
+			System.out.println((i + 1) + ". " + VrstaMjesta.values()[i]);
+		}
+
+		Integer redniBrojSenzora = null;
+
+		while (true) {
+			System.out.print("Odabir vrste mjesta >> ");
+			try {
+				redniBrojSenzora = scanner.nextInt();
+				break;
+			} catch (InputMismatchException ex) {
+				System.out.println("Neispravan unos!");
+				logger.error("Neispravan unos vrste mjesta!", ex);
+			}
+		}
+
+		if (redniBrojSenzora >= 1 && redniBrojSenzora < VrstaMjesta.values().length) {
+			vrstaMjesta = VrstaMjesta.values()[redniBrojSenzora - 1];
+		} else {
+			vrstaMjesta = VrstaMjesta.OSTALO;
+		}
+		return vrstaMjesta;
 	}
 
 	public static GeografskaTocka kreirajGeografskuTocku(Scanner scanner) {
@@ -145,16 +250,14 @@ public class Glavna {
 		return new GeografskaTocka(x, y);
 	}
 
-	public static Senzor[] kreirajSenzore(Scanner scanner) {
+	public static List<Senzor> kreirajSenzore(Scanner scanner) {
+		List<Senzor> senzori = new ArrayList<>();
 
-		Senzor[] senzori = new Senzor[3];
-
-		senzori[0] = kreirajSenzorTemperature(scanner);
-		senzori[1] = kreirajSenzorVlage(scanner);
-		senzori[2] = kreirajSenzorVjetra(scanner);
+		senzori.add(kreirajSenzorTemperature(scanner));
+		senzori.add(kreirajSenzorVlage(scanner));
+		senzori.add(kreirajSenzorVjetra(scanner));
 
 		return senzori;
-
 	}
 
 	private static SenzorVjetra kreirajSenzorVjetra(Scanner scanner) {
@@ -164,7 +267,9 @@ public class Glavna {
 		System.out.println("Unesite vrijednost senzora vjetra");
 		BigDecimal vrijednost = Validator.unesiBigDecimal(scanner);
 
-		SenzorVjetra senzorVjetra = new SenzorVjetra(velicinaSenzoraVjetra);
+		RadSenzora radSenzora = kreirajRadSenzora(scanner);
+
+		SenzorVjetra senzorVjetra = new SenzorVjetra(velicinaSenzoraVjetra, radSenzora);
 		senzorVjetra.setVrijednost(vrijednost);
 
 		return senzorVjetra;
@@ -174,7 +279,9 @@ public class Glavna {
 		System.out.println("Unesite vrijednost senzora vlage:");
 		BigDecimal vrijednost = Validator.unesiBigDecimal(scanner);
 
-		SenzorVlage senzorVlage = new SenzorVlage();
+		RadSenzora radSenzora = kreirajRadSenzora(scanner);
+
+		SenzorVlage senzorVlage = new SenzorVlage(radSenzora);
 		senzorVlage.setVrijednost(vrijednost);
 
 		return senzorVlage;
@@ -187,10 +294,39 @@ public class Glavna {
 		System.out.println("Unesite vrijednost senzora temperature:");
 		BigDecimal vrijednost = Validator.unesiBigDecimal(scanner);
 
-		SenzorTemperature senzorTemperature = new SenzorTemperature(nazivKonponente);
+		RadSenzora radSenzora = kreirajRadSenzora(scanner);
+
+		SenzorTemperature senzorTemperature = new SenzorTemperature(nazivKonponente, radSenzora);
 		senzorTemperature.setVrijednost(vrijednost);
 
 		return senzorTemperature;
+	}
+
+	private static RadSenzora kreirajRadSenzora(Scanner scanner) {
+		RadSenzora radSenzora;
+		for (int i = 0; i < RadSenzora.values().length - 1; i++) {
+			System.out.println((i + 1) + ". " + RadSenzora.values()[i]);
+		}
+
+		Integer redniBrojSenzora = null;
+
+		while (true) {
+			System.out.print("Odabir rada senzora >> ");
+			try {
+				redniBrojSenzora = scanner.nextInt();
+				break;
+			} catch (InputMismatchException ex) {
+				System.out.println("Neispravan unos!");
+				logger.error("Neispravan unos rada senzora!", ex);
+			}
+		}
+
+		if (redniBrojSenzora >= 1 && redniBrojSenzora < RadSenzora.values().length) {
+			radSenzora = RadSenzora.values()[redniBrojSenzora - 1];
+		} else {
+			radSenzora = RadSenzora.OSTALO;
+		}
+		return radSenzora;
 	}
 
 	public static MjernaPostaja kreirajKlasicnuMjernuPostaju(Scanner scanner) {
@@ -198,11 +334,19 @@ public class Glavna {
 		System.out.println("Unesite naziv mjerne postaje:");
 		String nazivMjernePostaje = scanner.nextLine();
 
+		Optional<MjernaPostaja> postaja = mjernePostaje.stream().filter(p -> p.getNaziv().equals(nazivMjernePostaje))
+				.findFirst();
+		if (postaja.isPresent())
+			return postaja.get();
+
 		Mjesto mjesto = kreirajMjesto(scanner);
 		GeografskaTocka geografskaTocka = kreirajGeografskuTocku(scanner);
-		Senzor[] senzori = kreirajSenzore(scanner);
+		List<Senzor> senzori = kreirajSenzore(scanner);
 
-		return new MjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
+		MjernaPostaja mjernaPostaja = new MjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
+		mjesto.getMjernePostaje().add(mjernaPostaja);
+
+		return mjernaPostaja;
 	}
 
 	public static MjernaPostaja kreirajRadioSondaznuMjernuPostaju(Scanner scanner) {
@@ -212,9 +356,13 @@ public class Glavna {
 
 		Mjesto mjesto = kreirajMjesto(scanner);
 		GeografskaTocka geografskaTocka = kreirajGeografskuTocku(scanner);
-		Senzor[] senzori = kreirajSenzore(scanner);
+		List<Senzor> senzori = kreirajSenzore(scanner);
 
-		return new RadioSondaznaMjernaPostaja(nazivMjernePostaje, mjesto, geografskaTocka, senzori);
+		RadioSondaznaMjernaPostaja radioSondaznaMjernaPostaja = new RadioSondaznaMjernaPostaja(nazivMjernePostaje,
+				mjesto, geografskaTocka, senzori);
+		mjesto.getMjernePostaje().add(radioSondaznaMjernaPostaja);
+
+		return radioSondaznaMjernaPostaja;
 	}
 
 }
