@@ -2,13 +2,13 @@ package hr.java.vjezbe.glavna;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import hr.java.vjezbe.entitet.Drzava;
 import hr.java.vjezbe.entitet.GeografskaTocka;
@@ -84,27 +84,18 @@ public class Glavna {
 		for (MjernaPostaja mjernaPostaja : mjernePostaje) {
 			listaSvihZupanijaIzDrzava.addAll(mjernaPostaja.getMjesto().getZupanija().getDrzava().getZupanije());
 		}
-
-		Map<String, Zupanija> mapaJedinstvenihZupanija = new HashMap<>();
-		for (Zupanija zupanija : listaSvihZupanijaIzDrzava) {
-			if (!mapaJedinstvenihZupanija.containsKey(zupanija.getNaziv())) {
-				mapaJedinstvenihZupanija.put(zupanija.getNaziv(), zupanija);
-			}
-		}
 		
-		List<Zupanija> listaJedinstvenihZupanijaIzDrzava = new ArrayList<>();
-		mapaJedinstvenihZupanija.forEach((a, b) -> listaJedinstvenihZupanijaIzDrzava.add(b));
-		
-		listaJedinstvenihZupanijaIzDrzava.sort(new ZupanijaSorter());
-		
-		listaJedinstvenihZupanijaIzDrzava.forEach(System.out::println);
+		Stream<Zupanija> distinctStream = listaSvihZupanijaIzDrzava.stream().distinct();
+		List<Zupanija> distinctList = distinctStream.collect(Collectors.toList());
+		distinctList.sort(new ZupanijaSorter());
+		distinctList.forEach(z -> System.out.println(z.getNaziv()));
 
-
+		
 		// Ispis mape mjernih postaja sa vrijednostima senzora
 		Map<Mjesto, List<Senzor>> collect = mjernePostaje.stream()
 				.collect(Collectors.toMap(MjernaPostaja::getMjesto, MjernaPostaja::dohvatiSenzore,
 						(mp1, mp2) -> {
-							System.out.println("Dupli ključevi");
+							//System.out.println("Dupli ključevi");
 							return mp1;
 						}));
 
